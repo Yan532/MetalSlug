@@ -1,8 +1,9 @@
 {
-    "title": "Test",
-    "identifier": "com.yourcompany.wizardEVP.Test",
-    "orientation": "landscape",
-    "versioncode": 1,
-    "versionname": "1.0",
-    "stage": "test"
+  "title": "Platformer",
+  "identifier": "net.vplay.demos.Platformer",
+  "orientation": "landscape",
+  "versioncode": 1,
+  "versionname": "1.0",
+  "stage": "test"
 }
+

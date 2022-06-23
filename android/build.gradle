@@ -1,26 +1,18 @@
 buildscript {
     repositories {
         google()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        mavenLocal()
         mavenCentral()
-        maven { url 'https://maven.google.com' }
-        jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:3.6.0'
     }
 }
 
 allprojects {
     repositories {
         google()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        mavenLocal()
         mavenCentral()
-        maven { url 'https://maven.google.com' }
-        jcenter()
         maven { url 'https://install.felgo.com/maven/' }
     }
 }
@@ -31,8 +23,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "androidx.appcompat:appcompat:1.2.0"
-
-
 }
 
 android {
@@ -96,5 +86,6 @@ android {
     tasks.withType(JavaCompile) {
         options.incremental = true
     }
+
 }
 
