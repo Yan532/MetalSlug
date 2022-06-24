@@ -24,6 +24,10 @@ EntityBase {
         // we could also directly modify the player position here, but the signal approach is a bit cleaner and helps separating the components
         resetSensor.contact()
       }
+      if(otherEntity.entityType === "pistolbullet")
+      {
+          otherEntity.removeEntity()                //接触到该触发器时删除子弹对象
+      }
     }
   }
 }

@@ -32,7 +32,7 @@ EntityBase {
     // this collider must be dynamic because we are moving it by applying forces and impulses
     bodyType: Body.Dynamic // this is the default value but I wanted to mention it ;)
     fixedRotation: true // we are running, not rolling...
-    //bullet: true // for super accurate collision detection, use this sparingly, because it's quite performance greedy
+    bullet: true // for super accurate collision detection, use this sparingly, because it's quite performance greedy
     sleepingAllowed: false
     // apply the horizontal value of the TwoAxisController as force to move the player left and right
     force: Qt.point(controller.xAxis*1000,0)

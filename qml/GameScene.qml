@@ -6,14 +6,15 @@ import "levels"
 Scene {
   id: gameScene
   // the "logical size" - the scene content is auto-scaled to match the GameWindow size
-//  width: 480
-//  height: 100
+  width: 600
+  height: 200
   gridSize: 32
 
   property int offsetBeforeScrollingStarts: 240
 
   EntityManager {
     id: entityManager
+    entityContainer: gameScene
   }
 
   // the whole screen is filled with an incredibly beautiful blue ...
@@ -77,18 +78,21 @@ Scene {
       y: 100
     }
 
-    Loader{
-        id:load
-        sourceComponent: bullet
-        focus: true
-    }
-
     Component{
         id:bullet
         Pistolbullet{
-            id:pistol
-            x:player.x+5
-            y:player.y*0.5
+            id:pistolbullet
+            PropertyAnimation on x{
+                from:player.x+30
+                to:endline.x
+                duration: 15000
+            }
+            PropertyAnimation on y{
+                from: player.y+30
+                to:endline.y + 250
+                duration: 15000
+            }
+
         }
     }
 
@@ -104,72 +108,80 @@ Scene {
         player.y = 100
       }
       // this is just for you to see how the sensor moves, in your real game, you should position it lower, outside of the visible area
-      Rectangle {
-        anchors.fill: parent
-        color: "yellow"
-        opacity: 0.5
-      }
     }
-  }
+    ResetSensor{
+        height:gameScene.gameWindowAnchorItem.height
+        width: 1
+        anchors.left: viewPort
+    }
 
-  Rectangle {
-    // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
-    //visible: !system.desktopPlatform
-    //enabled: visible
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    height: 50
-    width: 150
-    color: "blue"
-    opacity: 0.4
+    ResetSensor{
+        id:endline
+        height:gameScene.gameWindowAnchorItem.height
+        width: 1
+        x:15000
+        anchors.right: viewPort
+     }
+ }
 
-    Rectangle {
-      anchors.centerIn: parent
-      width: 1
-      height: parent.height
-      color: "white"
-    }
-    MultiPointTouchArea {
-      anchors.fill: parent
-      onPressed: {
-        if(touchPoints[0].x < width/2)
-          controller.xAxis = -1
-        else
-          controller.xAxis = 1
-      }
-      onUpdated: {
-        if(touchPoints[0].x < width/2)
-          controller.xAxis = -1
-        else
-          controller.xAxis = 1
-      }
-      onReleased: controller.xAxis = 0
-    }
-  }
+//  Rectangle {
+//    // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
+//    //visible: !system.desktopPlatform
+//    //enabled: visible
+//    anchors.right: parent.right
+//    anchors.bottom: parent.bottom
+//    height: 50
+//    width: 150
+//    color: "blue"
+//    opacity: 0.4
 
-  Rectangle {
-    // same as the above input control
-    //visible: !system.desktopPlatform
-    //enabled: visible
-    anchors.left: parent.left
-    anchors.bottom: parent.bottom
-    height: 100
-    width: 100
-    color: "green"
-    opacity: 0.4
+//    Rectangle {
+//      anchors.centerIn: parent
+//      width: 1
+//      height: parent.height
+//      color: "white"
+//    }
+//    MultiPointTouchArea {
+//      anchors.fill: parent
+//      onPressed: {
+//        if(touchPoints[0].x < width/2)
+//          controller.xAxis = -1
+//        else
+//          controller.xAxis = 1
+//      }
+//      onUpdated: {
+//        if(touchPoints[0].x < width/2)
+//          controller.xAxis = -1
+//        else
+//          controller.xAxis = 1
+//      }
+//      onReleased: controller.xAxis = 0
+//    }
+//  }
 
-    Text {
-      anchors.centerIn: parent
-      text: "jump"
-      color: "white"
-      font.pixelSize: 9
-    }
-    TapHandler{
-        onTapped: {
-            player.jump()
-        }
-    }
-  }
+//  Rectangle {
+//    // same as the above input control
+//    //visible: !system.desktopPlatform
+//    //enabled: visible
+//    anchors.left: parent.left
+//    anchors.bottom: parent.bottom
+//    height: 100
+//    width: 100
+//    color: "green"
+//    opacity: 0.4
+
+//    Text {
+//      anchors.centerIn: parent
+//      text: "jump"
+//      color: "white"
+//      font.pixelSize: 9
+//    }
+//    TapHandler{
+//        onTapped: {
+//            player.jump()
+//        }
+//    }
+//  }
 
   // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controller
   Keys.forwardTo: controller
@@ -197,13 +209,7 @@ Scene {
    }
 
   function fire(){
-      if(bullet.status == Component.Ready){
-          load.sourceComponent = Qt.createComponent("../qml/entities/Pistolbullet.qml")
-          load.focus = true
-      }
-
-
-      console.debug(load.sourceComponent)
+        entityManager.createEntityFromComponent(bullet)
   }
 }
 
