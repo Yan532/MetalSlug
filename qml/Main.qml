@@ -9,6 +9,7 @@ GameWindow {
   GameScene {
     id: gameScene
   }
+
 }
 
 
