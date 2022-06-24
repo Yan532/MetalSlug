@@ -1,0 +1,18 @@
+import Felgo 3.0
+import QtQuick 2.0
+
+EntityBase {
+  id: tiledEntity
+  property int column: 0
+  property int row: 0
+  property int size // gets set in Platform.qml and Ground.qml
+  // 在 Platform.qml 和 Ground.qml 中设置
+
+  // instead of directly modifying the x and y values of your tiles, we introduced rows and columns for easier positioning, have a look at Level1.qml on how they are used
+  // 我们没有直接修改图块的 x 和 y 值，而是引入了行和列以便于定位，请查看 Level1.qml 了解它们的使用方式
+  x: row*gameScene.gridSize
+  y: level.height - (column+1)*gameScene.gridSize
+  width: gameScene.gridSize * size
+  height: gameScene.gridSize
+}
+

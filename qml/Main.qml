@@ -9,6 +9,11 @@ GameWindow {
     screenWidth: 960
     screenHeight: 640
 
+    EntityManager {
+      id: entityManager
+      entityContainer: gameScene
+    }
+
     GameScene {
         id: gameScene
       }
