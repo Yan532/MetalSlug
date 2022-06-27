@@ -88,7 +88,7 @@ Scene {
                 duration: 15000
             }
             PropertyAnimation on y{
-                from: player.y+30
+                from: player.y + 30
                 to:endline.y + 250
                 duration: 15000
             }

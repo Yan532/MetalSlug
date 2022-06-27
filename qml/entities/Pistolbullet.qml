@@ -4,27 +4,23 @@ import Felgo 3.0
 EntityBase {
     id: pistolbullet
     entityType: "pistolbullet"
-    width: 23
-    height: 7
+    width: 50
+    height: 10
 
-    MultiResolutionImage {
+
+    Image{
         id: image
-        source: "../../assets/Arms/pistol.png"
+        width: 23
+        height: 7
+        source: "../../assets/Arms/bullet2.png"
+        anchors.centerIn: parent
     }
 
     BoxCollider {
       id: collider
-      height: parent.height
-      width: parent.width
-      anchors.fill: image
+      height: 30
+      width: 10
+      anchors.fill: parent
       collisionTestingOnlyMode: true
-      // this collider must be dynamic because we are moving it by applying forces and impulsesd
-      bullet: true // for super accurate collision detection, use this sparingly, because it's quite performance greedy
-      sleepingAllowed: false
-      // apply the horizontal value of the TwoAxisController as force to move the player left and right
-      force: Qt.point(0,0)
-      onLinearVelocityChanged: {
-          if(linearVelocity.y !== 0) linearVelocity.y = 0
-      }
     }
 }
