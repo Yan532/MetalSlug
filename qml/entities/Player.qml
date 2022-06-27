@@ -16,71 +16,79 @@ EntityBase {
   // property binding to determine the state of the player like described above
   state: contacts > 0 ? "walking" : "jumping"
   onStateChanged: console.debug("player.state " + state)
-
   // here you could use a SpriteSquenceVPlay to animate your player
   MultiResolutionImage {
-      asynchronous:visible;
+
+
       SequentialAnimation
       {
           id:anim
+          running:flase
+
+
           ScriptAction { script: sequence.goalSprite = "still"; }
-
-          ScriptAction { script: {image.goalSprite = ""; sequence.jumpTo("fire");}
-
-          }
       }
-
-
-
-
-       SpriteSequence {
+       SpriteSequence {//作为一系列帧存储的多个动画之间的播放和转换。
            id:sequence
            scale:0.2
            anchors.horizontalCenter: parent.horizontalAlignment
-           width: 111
-           height:111
+           width: 120
+           height:120
            goalSprite:""
            running: flase
-           interpolate: flase
+           interpolate: Fixture
            Sprite
            {
 
                name:"still"
                source: "/合金弹头/MetalSlug/assets/player/fire.png"
-               frameCount:1;
+               frameCount:2;
                frameWidth: 62
                frameHeight: 56
-               duration:200
+               duration:400
                frameX: 0
                frameY:0
           }
-           Sprite
-           {
 
-               name:"fire"
-               source: "/合金弹头/MetalSlug/assets/player/fire.png"
-               frameCount:5;
-               frameWidth: 62
-               frameHeight: 56
-               duration:200
-               frameX: 0
-               frameY:0
-          }
            }
+       focus: true;
+              Keys.onPressed: {
+                  switch(event.key)
+                  {
+                  case Qt.Key_Up:
+                     sequence.running = ture;
+                      break;
+                  case Qt.Key_Down:
+                     sequence.running = ture;
+                      break;
+                  case Qt.Key_Left:
+                    sequence.running = true;
+                      break;
+                  case Qt.Key_Right:
+                   sequence.running = true;
+                      break;
+                  default:
+                      ;
+                  }
+              }
+              Keys.onReleased: {
+                  sequence.running = false;
+              }
 
-  }
+}
 
-//           Sprite
-//        {
-//            name:"zoulu"
-//            source: "/合金弹头/MetalSlug/assets/player/zoulu.png"
-//            frameCount:5;
-//            frameWidth: 33
-//            frameHeight: 32
-//            duration:200
-//            frameX: 0
-//            frameY:0
-//       }
+
+           Sprite
+        {
+            name:"zoulu"
+            source: "/合金弹头/MetalSlug/assets/player/zoulu.png"
+            frameCount:5;
+            frameWidth: 33
+            frameHeight: 32
+            duration:200
+            frameX: 0
+            frameY:0
+       }
 
 
   BoxCollider {//矩形的物理实体
@@ -127,6 +135,7 @@ EntityBase {
     }
   }
 }
+
 
 
 

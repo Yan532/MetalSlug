@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.2, 2022-06-24T18:01:48. -->
+<!-- Written by QtCreator 4.11.2, 2022-06-27T09:07:07. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -64,7 +64,7 @@
   <valuemap type="QVariantMap">
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Android for armeabi-v7a,arm64-v8a,x86,x86_64 (Clang Qt 5.15.2 Android (multi) Felgo)</value>
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Android for armeabi-v7a,arm64-v8a,x86,x86_64 (Clang Qt 5.15.2 Android (multi) Felgo)</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{3225e405-627a-4197-a00b-452e0a7656fd}</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{c8deb497-dc11-4073-bd4b-bd2708a7e53a}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>

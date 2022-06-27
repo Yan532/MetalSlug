@@ -11,18 +11,15 @@ TiledEntityBase {
     id: tileRow
     Tile {
       pos: "left"
-    // image: "../../assets/ground/left.png"
     }
     Repeater {
       model: size-2
       Tile {
         pos: "mid"
-      //  image: "../../assets/ground/mid.png"
       }
     }
     Tile {
       pos: "right"
- //  image: "../../assets/ground/right.png"
     }
   }
 
