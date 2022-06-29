@@ -1,24 +1,12 @@
-<<<<<<< HEAD
-=======
-/*新增了从右到左移动的敌人
-*制作了主角和敌人的动画但敌人运动的动画和移动的暂时有一点问题
-*接下来增加子弹射击消灭怪物
-*增加背景音乐加场景切换
-*/
->>>>>>> liaowanyu
 import Felgo 3.0
 import QtQuick 2.15
 import "entities"
 import "levels"
-<<<<<<< HEAD
 
-=======
->>>>>>> liaowanyu
 Scene {
   id: gameScene
   // the "logical size" - the scene content is auto-scaled to match the GameWindow size
   width: 480
-<<<<<<< HEAD
   height: 320
   gridSize: 32
 
@@ -39,61 +27,27 @@ Scene {
   ParallaxScrollingBackground {
     sourceImage: "../assets/background/layer1.jpg"
     anchors.fill: gameScene.gameWindowAnchorItem
-=======
-  height: 160
-  gridSize: 32
-  xScaleForScene: 3
-  yScaleForScene: 3
-
-  property int offsetBeforeScrollingStarts: 240
-
-
-  EntityManager {
-    id: entityManager
-
-  }
-
-  // the whole screen is filled with an incredibly beautiful blue ...
-
-
-  // ... followed by 2 parallax layers with trees and grass
-  ParallaxScrollingBackground {
-     sourceImage: "../assets/background/layer1.jpg"
-    anchors.fill: gameScene.gameWindowAnchorItem
-    anchors.horizontalCenter: gameScene.gameWindowAnchorItem.horizontalCenter
->>>>>>> liaowanyu
     // we move the parallax layers at the same speed as the player
     movementVelocity: player.x > offsetBeforeScrollingStarts ? Qt.point(-player.horizontalVelocity,0) : Qt.point(0,0)
     // the speed then gets multiplied by this ratio to create the parallax effect
     ratio: Qt.point(0.3,0)
   }
-<<<<<<< HEAD
 //  ParallaxScrollingBackground {
 //    sourceImage: "../assets/background/layer1.jpg"
 //    anchors.fill: parent
-=======
-
-//  ParallaxScrollingBackground {
-//    sourceImage: "../assets/background/layer1.jpg"
-//    anchors.fill: gameScene.gameWindowAnchorItem
->>>>>>> liaowanyu
 //    anchors.horizontalCenter: gameScene.gameWindowAnchorItem.horizontalCenter
 //    movementVelocity: player.x > offsetBeforeScrollingStarts ? Qt.point(-player.horizontalVelocity,0) : Qt.point(0,0)
 //    ratio: Qt.point(0.6,0)
 //  }
 
   // this is the moving item containing the level and player
-<<<<<<< HEAD
 
 
-=======
->>>>>>> liaowanyu
   Item {
     id: viewPort
     height: level.height
     width: level.width
     anchors.bottom: gameScene.gameWindowAnchorItem.bottom
-<<<<<<< HEAD
     x: player.x > offsetBeforeScrollingStarts ? offsetBeforeScrollingStarts - player.x : 0
 
     PhysicsWorld {
@@ -101,15 +55,6 @@ Scene {
       gravity.y: 20
       debugDrawVisible: true // enable this for physics debugging
       z: 1000
-=======
-    x: player.x > offsetBeforeScrollingStarts ? offsetBeforeScrollingStarts-player.x : 0
-
-    PhysicsWorld {
-      id: physicsWorld
-      gravity: Qt.point(0, 50)
-      debugDrawVisible: false // 显示实体视图
-      z: 1024//物理世界高度
->>>>>>> liaowanyu
 
       onPreSolve: {
         //this is called before the Box2DWorld handles contact events
@@ -131,9 +76,12 @@ Scene {
 
     Player {
       id: player
-<<<<<<< HEAD
       x: 50
       y: 100
+    }
+
+    Enemy{
+
     }
 
 
@@ -142,14 +90,6 @@ Scene {
         Pistolbullet{
             id:pistolbullet
         }
-=======
-      x: 100
-      y: 200
-
-    }
-    Enemy{
-        id:enemy
->>>>>>> liaowanyu
     }
 
     ResetSensor {
@@ -163,7 +103,6 @@ Scene {
         player.y = 100
       }
       // this is just for you to see how the sensor moves, in your real game, you should position it lower, outside of the visible area
-<<<<<<< HEAD
     }
     ResetSensor{
         id:startline
@@ -263,24 +202,27 @@ Scene {
       console.debug("key pressed actionName " + actionName)
           if(actionName == "up")
           {
+              player.anim.jumpTo("up")
               player.body.rotation = 270
+              player.anim.running = true
           }
           if(actionName == "right")
           {
+              player.anim.jumpTo("right")
               player.body.rotation = 0
+              player.anim.running = true
           }
           if(actionName == "left")
           {
+              player.anim.jumpTo("left");
               player.body.rotation = 180
+              player.anim.running = true
           }
           if(actionName == "down")
           {
               if(player.state == "jumping")
               {
                   player.body.rotation = 90
-              }
-              else{
-                  player.body.height -= 20
               }
           }
 
@@ -316,105 +258,3 @@ Scene {
   }
 }
 
-=======
-      Rectangle {
-        anchors.fill: parent
-        color: "yellow"
-        opacity: 0.5
-      }
-    }
-  }
-
-  Rectangle {
-    // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
-    //visible: !system.desktopPlatform
-    //enabled: visible
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    height: 100
-    width: 100
-    color: "blue"
-    opacity: 0.4
-
-    Rectangle {
-      anchors.centerIn: parent
-      width: 1
-      height: parent.height
-      color: "white"
-
-    }
-    MultiPointTouchArea {
-      anchors.fill: parent
-      onPressed: {
-        if(touchPoints[0].x < width/2)
-          controller.xAxis = -1
-        else
-          controller.xAxis = 1
-      }
-      onUpdated: {
-        if(touchPoints[0].x < width/2)
-          controller.xAxis = -1
-        else
-          controller.xAxis = 1
-      }
-      onReleased: controller.xAxis = 0
-    }
-  }
-
-  Rectangle {
-    // same as the above input control
-    //visible: !system.desktopPlatform
-    //enabled: visible
-    anchors.left: parent.left
-    anchors.bottom: parent.bottom
-    height: 100
-    width: 100
-    color: "blue"
-    opacity: 0.4
-
-    Text {
-      anchors.centerIn: parent
-      text: "jump"
-      color: "red"
-      font.pixelSize: 20
-    }
-    MouseArea {
-      anchors.fill: parent
-      onPressed: player.jump()
-    }
-  }
-
-     Sprite
-     {
-
-
-    }
-  // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controller
-     Keys.forwardTo: controller
-     TwoAxisController {
-       id: controller
-       
-       inputActionsToKeyCode: {
-                       "up": Qt.Key_Up,
-                       "down": Qt.Key_Down,
-                       "left": Qt.Key_Left,
-                       "right": Qt.Key_Right,}
-       onInputActionPressed: {
-         console.debug("key pressed actionName " + actionName)
-         if(actionName == "up") {
-           player.jump()
-         }
-     }
-   }
-}
-
-
-
-
-
-
-
-
-
-
->>>>>>> liaowanyu

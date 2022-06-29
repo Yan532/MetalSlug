@@ -11,10 +11,6 @@ EntityBase {
   x: row*gameScene.gridSize
   y: level.height - (column+1)*gameScene.gridSize
   width: gameScene.gridSize * size
-<<<<<<< HEAD
   height: gameScene.gridSize
-=======
-  height: gameScene.gridSize1
->>>>>>> liaowanyu
 }
 

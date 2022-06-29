@@ -5,14 +5,15 @@ EntityBase {
      entityType: "enemy"
     MultiResolutionImage {
       id: enemyImage
-      source: "/合金弹头/MetalSlug/assets/图像/image480.png"
+      source: "../../assets/图像/image495.png"
       scale: 0.5
     }
 //    y: utils.generateRandomValueBetween(0, parent.height)
       y:240
+      x:2000
 
     NumberAnimation on x {
-      from: parent.width
+      from: 2000
       to: -enemyImage.width
 //      duration: utils.generateRandomValueBetween(1000, 4000) //随机生成怪物的持续时间
        duration:12000
@@ -24,8 +25,7 @@ EntityBase {
       fixture.onBeginContact: {
         var collidedEntity = other.getBody().target
         console.debug("collided with entity", collidedEntity.entityType)
-        if(collidedEntity.entityType === "projectile") {
-          monstersDestroyed++
+        if(collidedEntity.entityType === "pistolbullet") {
           collidedEntity.removeEntity()
           removeEntity()
         }
