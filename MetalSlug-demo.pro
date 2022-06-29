@@ -60,4 +60,8 @@ macx {
 }
 
 DISTFILES += \
+<<<<<<< HEAD
     qml/compnent/Pistol.qml
+=======
+    qml/entities/Enemy.qml
+>>>>>>> liaowanyu

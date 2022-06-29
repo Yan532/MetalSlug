@@ -3,11 +3,19 @@
     "arguments": [
         "clang",
         "-I",
+<<<<<<< HEAD
         "/opt/Qt5.15/Tools/QtCreator/share/qtcreator/cplusplus/wrappedQtHeaders",
         "-I",
         "/opt/Qt5.15/Tools/QtCreator/share/qtcreator/cplusplus/wrappedQtHeaders/QtCore",
         "-I",
         "/tmp/QtCreator-ocIiKe/clang-uiheader-UBEHFq",
+=======
+        "/opt/Qt6.3.1/Tools/QtCreator/share/qtcreator/cplusplus/wrappedQtHeaders",
+        "-I",
+        "/opt/Qt6.3.1/Tools/QtCreator/share/qtcreator/cplusplus/wrappedQtHeaders/QtCore",
+        "-I",
+        "/tmp/QtCreator-LqtaBk/clang-uiheader-vlRYYs",
+>>>>>>> liaowanyu
         "-nostdinc",
         "-nostdinc++",
         "-pipe",
@@ -24,7 +32,11 @@
         "-DQT_GUI_LIB",
         "-DQT_CORE_LIB",
         "-I",
+<<<<<<< HEAD
         "/root/MetalSlug",
+=======
+        "/合金弹头/MetalSlug",
+>>>>>>> liaowanyu
         "-I",
         "/opt/Qt6.3.1/6.3.1/gcc_64/include",
         "-I",
@@ -42,7 +54,11 @@
         "-isystem",
         "/usr/local/include",
         "-isystem",
+<<<<<<< HEAD
         "/opt/Qt5.15/Tools/QtCreator/libexec/qtcreator/clang/lib/clang/14.0.3/include",
+=======
+        "/usr/lib/clang/13.0.1/include",
+>>>>>>> liaowanyu
         "-isystem",
         "/usr/include",
         "-fmessage-length=0",
@@ -55,9 +71,16 @@
         "-Wno-unknown-pragmas",
         "-Wno-unknown-warning-option",
         "-Wno-documentation-unknown-command",
+<<<<<<< HEAD
         "/root/MetalSlug/main.cpp"
     ],
     "directory": "/root/MetalSlug/.qtc_clangd",
     "file": "/root/MetalSlug/main.cpp"
+=======
+        "/合金弹头/MetalSlug/main.cpp"
+    ],
+    "directory": "/合金弹头/MetalSlug/.qtc_clangd",
+    "file": "/合金弹头/MetalSlug/main.cpp"
+>>>>>>> liaowanyu
 }
 ]
