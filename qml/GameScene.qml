@@ -1,8 +1,12 @@
+/*新增了从右到左移动的敌人
+*制作了主角和敌人的动画但敌人运动的动画和移动的暂时有一点问题
+*接下来增加子弹射击消灭怪物
+*增加背景音乐加场景切换
+*/
 import Felgo 3.0
 import QtQuick 2.15
 import "entities"
 import "levels"
-
 Scene {
   id: gameScene
   // the "logical size" - the scene content is auto-scaled to match the GameWindow size
@@ -78,6 +82,10 @@ Scene {
       id: player
       x: 100
       y: 200
+
+    }
+    Enemy{
+        id:enemy
     }
 
     ResetSensor {
@@ -158,24 +166,28 @@ Scene {
     }
   }
 
-
-
      Sprite
      {
 
 
     }
   // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controller
-  Keys.forwardTo: controller
-  TwoAxisController {
-    id: controller
-    onInputActionPressed: {
-      console.debug("key pressed actionName " + actionName)
-      if(actionName == "up") {
-        player.jump()
-      }
-    }
-  }
+     Keys.forwardTo: controller
+     TwoAxisController {
+       id: controller
+       
+       inputActionsToKeyCode: {
+                       "up": Qt.Key_Up,
+                       "down": Qt.Key_Down,
+                       "left": Qt.Key_Left,
+                       "right": Qt.Key_Right,}
+       onInputActionPressed: {
+         console.debug("key pressed actionName " + actionName)
+         if(actionName == "up") {
+           player.jump()
+         }
+     }
+   }
 }
 
 

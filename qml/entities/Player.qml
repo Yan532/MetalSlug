@@ -16,56 +16,96 @@ EntityBase {
   // property binding to determine the state of the player like described above
   state: contacts > 0 ? "walking" : "jumping"
   onStateChanged: console.debug("player.state " + state)
+
+
+
+
+  Image{ x:30;
+   id: image1;
+   source: "/合金弹头/MetalSlug/assets/player/contral.png";
+   visible: false}
+
   // here you could use a SpriteSquenceVPlay to animate your player
   MultiResolutionImage {
 
+      SpriteSequence {
+                  id: sequence;
+                  width: 85;
+                  height: 85;
+                  scale: 0.5
+                  interpolate: true;
+                  running: false;
+                  sprites: [
+                      Sprite {
+                          name: "left";
+                          source: image1.source;
+                          frameCount: 4;
+                          frameY: image1.height/4;
+                          frameWidth: image1.width/4;
+                          frameHeight: image1.height/4;
+                          frameRate: 10;
+                          duration: 200
 
-      SequentialAnimation
-      {
-          id:anim
-          running:flase
+                      },
+                      Sprite {
+                          name: "right";
+                          source: image1.source;
+                          frameCount: 4;
+                          frameY: image1.height/4*2;
+                          frameWidth: image1.width/4;
+                          frameHeight: image1.height/4;
+                          frameRate: 10;
+                          duration: 200
+
+                      },
+                      Sprite {
+                          name: "down";
+                          source: image1.source;
+                          frameCount: 4;
+                          frameWidth: image1.width/4;
+                          frameHeight: image1.height/4;
+                          frameRate: 10;
+                          duration: 200
+
+                      },
 
 
-          ScriptAction { script: sequence.goalSprite = "still"; }
-      }
-       SpriteSequence {//作为一系列帧存储的多个动画之间的播放和转换。
-           id:sequence
-           scale:0.2
-           anchors.horizontalCenter: parent.horizontalAlignment
-           width: 120
-           height:120
-           goalSprite:""
-           running: flase
-           interpolate: Fixture
-           Sprite
-           {
+                      Sprite {
+                          name: "up";
+                          source: image1.source;
+                          frameCount: 4;
+                          frameY: image1.height/4*3;
+                          frameWidth: image1.width/4;
+                          frameHeight: image1.height/4;
+                          frameRate: 10;
+                          duration: 200
 
-               name:"still"
-               source: "/合金弹头/MetalSlug/assets/player/fire.png"
-               frameCount:2;
-               frameWidth: 62
-               frameHeight: 56
-               duration:400
-               frameX: 0
-               frameY:0
-          }
-
-           }
-       focus: true;
+                      }
+                  ]
+              }
+      focus: true;
               Keys.onPressed: {
                   switch(event.key)
                   {
                   case Qt.Key_Up:
-                     sequence.running = ture;
+                      sequence.y -= 5;
+                      sequence.jumpTo("up");
+                      sequence.running = true;
                       break;
                   case Qt.Key_Down:
-                     sequence.running = ture;
+                      sequence.y += 5;
+                      sequence.jumpTo("down");
+                      sequence.running = true;
                       break;
                   case Qt.Key_Left:
-                    sequence.running = true;
+                      sequence.x -= 5;
+                      sequence.jumpTo("left");
+                      sequence.running = true;
                       break;
                   case Qt.Key_Right:
-                   sequence.running = true;
+                      sequence.x += 5;
+                      sequence.jumpTo("right");
+                      sequence.running = true;
                       break;
                   default:
                       ;
@@ -75,21 +115,8 @@ EntityBase {
                   sequence.running = false;
               }
 
+
 }
-
-
-           Sprite
-        {
-            name:"zoulu"
-            source: "/合金弹头/MetalSlug/assets/player/zoulu.png"
-            frameCount:5;
-            frameWidth: 33
-            frameHeight: 32
-            duration:200
-            frameX: 0
-            frameY:0
-       }
-
 
   BoxCollider {//矩形的物理实体
     id: collider

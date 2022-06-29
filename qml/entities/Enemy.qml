@@ -2,11 +2,35 @@ import QtQuick 2.15
 import Felgo 3.0
 
 EntityBase {
-       id: enemy
-       entityType: "enemy"
-       width: 148
-       height: 87
+     entityType: "enemy"
+    MultiResolutionImage {
+      id: enemyImage
+      source: "/合金弹头/MetalSlug/assets/图像/image480.png"
+      scale: 0.5
+    }
+//    y: utils.generateRandomValueBetween(0, parent.height)
+      y:240
 
+    NumberAnimation on x {
+      from: parent.width
+      to: -enemyImage.width
+//      duration: utils.generateRandomValueBetween(1000, 4000) //随机生成怪物的持续时间
+       duration:12000
+    }
+
+    BoxCollider {
+      anchors.fill: enemyImage
+      collisionTestingOnlyMode: true
+      fixture.onBeginContact: {
+        var collidedEntity = other.getBody().target
+        console.debug("collided with entity", collidedEntity.entityType)
+        if(collidedEntity.entityType === "projectile") {
+          monstersDestroyed++
+          collidedEntity.removeEntity()
+          removeEntity()
+        }
+      }
+    }
         TapHandler
         {
             onTapped: anim.start()
@@ -16,11 +40,10 @@ EntityBase {
            id:anim
            ScriptAction
            {
-
-               script: {sequence.goalSprite="";sequence.jumpTo(("touxiang"))
+               script: {sequence.goalSprite="";sequence.jumpTo(("enemy"))
                }
            }
-           NumberAnimation  { target: sequence;property: "x"; to:240;duration: 12000 }
+           NumberAnimation  { target: sequence;property: "x"; from:800;to:600;duration: 12000 }
    }
          SpriteSequence {
              id:sequence
@@ -32,9 +55,8 @@ EntityBase {
 
           Sprite
           {
-              name:"touxiang"
-              source: "/合金弹头/MetalSlug/assets/touxiang/touxiang.png"
-              frameCount:5;
+              name:"enemy"
+              source: enemyImage.source
               frameWidth: 148
               frameHeight: 87
               duration:200
@@ -45,5 +67,6 @@ EntityBase {
 
     }
     }
+
 
 
