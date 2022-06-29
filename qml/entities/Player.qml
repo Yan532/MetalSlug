@@ -4,38 +4,43 @@ import QtQuick 2.0
 EntityBase {
   id: player
   entityType: "player"
-  width: 50
-  height: 50
+  width: image.width
+  height: image.height
 
   // add some aliases for easier access to those properties from outside
   property alias collider: collider
   property alias horizontalVelocity: collider.linearVelocity.x
+  property alias body: image
 
   // the contacts property is used to determine if the player is in touch with any solid objects (like ground or platform), because in this case the player is walking, which enables the ability to jump. contacts > 0 --> walking state
   property int contacts: 0
+  property int leftoright: 0
+  property int up: 0
   // property binding to determine the state of the player like described above
+
   state: contacts > 0 ? "walking" : "jumping"
   onStateChanged: console.debug("player.state " + state)
 
   // here you could use a SpriteSquenceVPlay to animate your player
-  MultiResolutionImage {
-    source: "../../assets/player/run.png"
+  AnimatedImage {
+      id:image
+      scale: 0.6
+      source: "../../assets/player/player.png"
+      rotation: 0
   }
 
 
 
-  BoxCollider {
+  CircleCollider {
     id: collider
-    height: parent.height
-    width: 20
-    anchors.horizontalCenter: parent.horizontalCenter
+    radius: image.width/3
+    x:radius/2
+    y:radius/2 - 10
     // this collider must be dynamic because we are moving it by applying forces and impulses
-    bodyType: Body.Dynamic // this is the default value but I wanted to mention it ;)
-    fixedRotation: true // we are running, not rolling...
-    bullet: true // for super accurate collision detection, use this sparingly, because it's quite performance greedy
-    sleepingAllowed: false
-    // apply the horizontal value of the TwoAxisController as force to move the player left and right
+    density: 0
+    linearDamping: 1
     force: Qt.point(controller.xAxis*1000,0)
+    rotation: 0
     // limit the horizontal velocity
     onLinearVelocityChanged: {
       if(linearVelocity.x > 100) linearVelocity.x = 100

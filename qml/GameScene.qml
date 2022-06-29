@@ -6,15 +6,15 @@ import "levels"
 Scene {
   id: gameScene
   // the "logical size" - the scene content is auto-scaled to match the GameWindow size
-  width: 600
-  height: 200
+  width: 480
+  height: 320
   gridSize: 32
 
-  property int offsetBeforeScrollingStarts: 240
+  property int offsetBeforeScrollingStarts: 200
 
   EntityManager {
     id: entityManager
-    entityContainer: gameScene
+    entityContainer: viewPort
   }
 
   // the whole screen is filled with an incredibly beautiful blue ...
@@ -41,12 +41,14 @@ Scene {
 //  }
 
   // this is the moving item containing the level and player
+
+
   Item {
     id: viewPort
     height: level.height
     width: level.width
     anchors.bottom: gameScene.gameWindowAnchorItem.bottom
-    x: player.x > offsetBeforeScrollingStarts ? offsetBeforeScrollingStarts-player.x : 0
+    x: player.x > offsetBeforeScrollingStarts ? offsetBeforeScrollingStarts - player.x : 0
 
     PhysicsWorld {
       id: physicsWorld
@@ -74,28 +76,17 @@ Scene {
 
     Player {
       id: player
-      x: 20
+      x: 50
       y: 100
     }
+
 
     Component{
         id:bullet
         Pistolbullet{
             id:pistolbullet
-            PropertyAnimation on x{
-                from:player.x+30
-                to:endline.x
-                duration: 15000
-            }
-            PropertyAnimation on y{
-                from: player.y + 30
-                to:endline.y + 250
-                duration: 15000
-            }
-
         }
     }
-
 
     ResetSensor {
       width: player.width
@@ -110,6 +101,7 @@ Scene {
       // this is just for you to see how the sensor moves, in your real game, you should position it lower, outside of the visible area
     }
     ResetSensor{
+        id:startline
         height:gameScene.gameWindowAnchorItem.height
         width: 1
         anchors.left: viewPort
@@ -122,6 +114,13 @@ Scene {
         x:15000
         anchors.right: viewPort
      }
+
+    ResetSensor{
+        id:topline
+        width: gameScene.gameWindowAnchorItem.width
+        height: 1
+        anchors.top: viewPort.top
+    }
  }
 
 //  Rectangle {
@@ -197,6 +196,29 @@ Scene {
       }
       onInputActionPressed: {
       console.debug("key pressed actionName " + actionName)
+          if(actionName == "up")
+          {
+              player.body.rotation = 270
+          }
+          if(actionName == "right")
+          {
+              player.body.rotation = 0
+          }
+          if(actionName == "left")
+          {
+              player.body.rotation = 180
+          }
+          if(actionName == "down")
+          {
+              if(player.state == "jumping")
+              {
+                  player.body.rotation = 90
+              }
+              else{
+                  player.body.height -= 20
+              }
+          }
+
           if(actionName == "jump")
           {
               player.jump()
@@ -209,7 +231,23 @@ Scene {
    }
 
   function fire(){
-        entityManager.createEntityFromComponent(bullet)
+      var speed = 500
+
+      var rotation = player.body.rotation
+
+      // calculate a bullet movement vector with the rotation and the speed
+      var xDirection = Math.cos(rotation * Math.PI / 180.0) * speed
+      var yDirection = Math.sin(rotation * Math.PI / 180.0) * speed
+
+      // calculate the bullet spawn point: start at the center of the tank translate it outside of the body towards the final direction
+      var startX= (16 * Math.cos((rotation) * Math.PI / 180)) + player.x + player.width / 2
+      var startY= (16 * Math.sin((rotation) * Math.PI / 180)) + player.y + player.height / 2
+
+      // create and remove bullet entities at runtime
+      entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../qml/entities/Pistolbullet.qml"), {
+                                                        "start" : Qt.point(startX, startY),
+                                                        "velocity" : Qt.point(xDirection, yDirection),
+                                                        "rotation" : player.body.rotation});
   }
 }
 

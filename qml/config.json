@@ -1,9 +1,8 @@
 {
   "title": "Platformer",
-  "identifier": "net.vplay.demos.Platformer",
+  "identifier": "com.yourcompany.wizardEVP.MetalSlugdemo",
   "orientation": "landscape",
   "versioncode": 1,
-  "versionname": "1.0",
+  "versionname": "1.0.0",
   "stage": "test"
 }
-

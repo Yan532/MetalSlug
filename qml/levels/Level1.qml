@@ -15,6 +15,6 @@ Levels.LevelBase {
   Ground{
       row:0
       column: 0
-      size:1000
+      size:20
   }
 }

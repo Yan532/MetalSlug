@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>qml</file>
-		<file>qml/entities</file>
-		<file>qml/levels</file>
     </qresource>
 </RCC>
-
