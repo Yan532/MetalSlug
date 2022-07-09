@@ -55,13 +55,17 @@ EntityBase {
                   height: 85;
                   scale: 0.5
                   interpolate: true;
-                  running: true;
+                  running: false;
                   sprites: [
                       Sprite {
                           name: "left";
                           source: image.source;
                           frameCount: 4;
+<<<<<<< HEAD
                           frameY: 0;
+=======
+                          frameY: ;
+>>>>>>> liaowanyu
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -83,7 +87,11 @@ EntityBase {
                           name: "down";
                           source: image.source;
                           frameCount: 4;
+<<<<<<< HEAD
                           frameY:image.height/4*3
+=======
+                           frameY: image.height/4*3;
+>>>>>>> liaowanyu
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;

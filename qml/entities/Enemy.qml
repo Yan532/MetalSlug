@@ -1,11 +1,13 @@
-import QtQuick 2.15
+﻿import QtQuick 2.15
 import Felgo 3.0
 
 EntityBase {
      entityType: "enemy"
+
     MultiResolutionImage {
       id: enemyImage
-      source: "../../assets/图像/image495.png"
+      visible: false
+      source: "../../assets/touxiang/enemy.png"
       scale: 0.5
     }
 //    y: utils.generateRandomValueBetween(0, parent.height)
@@ -13,20 +15,27 @@ EntityBase {
       x:2000
 
     NumberAnimation on x {
-      from: 2000
+      from: 1500
       to: -enemyImage.width
 //      duration: utils.generateRandomValueBetween(1000, 4000) //随机生成怪物的持续时间
        duration:12000
     }
 
     BoxCollider {
+<<<<<<< HEAD
+=======
+        height:242/5
+        width: 42
+>>>>>>> liaowanyu
       collisionTestingOnlyMode: true
       fixture.onBeginContact: {
         var collidedEntity = other.getBody().target
         console.debug("collided with entity", collidedEntity.entityType)
         if(collidedEntity.entityType === "pistolbullet") {
           collidedEntity.removeEntity()
+            monstersDestroyed++
           removeEntity()
+
         }
       }
     }
@@ -46,26 +55,29 @@ EntityBase {
    }
          SpriteSequence {
              id:sequence
-             scale:0.25
+             scale: 0.5
              anchors.horizontalCenter: parent.horizontalAlignment
-             width: 256
-             height: 253
+             width: 242/5
+             height: 72
              goalSprite:""
 
           Sprite
           {
               name:"enemy"
               source: enemyImage.source
-              frameWidth: 148
-              frameHeight: 87
+              frameWidth: 242/5
+              frameHeight: 72
               duration:200
-              frameX: 0
+              frameX:0
               frameY:0
+              frameCount: 5
 
          }
 
     }
+
     }
+
 
 
 

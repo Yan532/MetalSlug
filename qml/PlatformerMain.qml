@@ -3,7 +3,16 @@ import QtQuick 2.0
 
 GameWindow {
   id: gameWindow
-
+  property bool gameWon
+  property bool splashFinished: false
+  onSplashScreenFinished: { splashFinished = true}
+  property int monstersDestroyed
+  onMonstersDestroyedChanged: {
+    if(monstersDestroyed > 5) {
+      // you won the game, shot at 5 monsters
+      changeToGameOverScene(true)
+    }
+  }
   // You get free licenseKeys from https://felgo.com/licenseKey
   // With a licenseKey you can:
   //  * Publish your games & apps for the app stores
@@ -22,6 +31,75 @@ GameWindow {
 
   GameScene {
     id: gameScene
+    visible: false
   }
+  Scene {
+    id: gameOverScene
+    visible: false
+    BackgroundImage
+    {
+        anchors.fill:parent
+        source: "/合金弹头/MetalSlug/assets/background/background.png"
+    }
+    Text {
+      anchors.centerIn: parent
+      text: gameWon ? "You won " : "You lost"
+    }
+
+    onVisibleChanged: {
+      if(visible) {
+        returnToGameSceneTimer.start()  // make the scene invisible after 3 seconds, after it got visible
+      }
+    }
+
+    Timer {
+      id: returnToGameSceneTimer
+      interval: 3000
+      onTriggered: {
+        gameScene.visible = true
+        gameOverScene.visible = false
+      }
+    }
+  }// GameOverScene
+  Scene
+  {
+     id:startScene
+     visible:true
+     BackgroundImage
+     {
+         anchors.fill:parent
+         source: "/合金弹头/MetalSlug/assets/background/background.png"
+     }
+
+     Text {
+       anchors.centerIn: parent
+       text: "Start"
+     }
+     onVisibleChanged: {
+       if(visible) {
+        gotoToGameSceneTimer.start()
+       }
+     }
+
+     Timer {
+       id:gotoToGameSceneTimer
+       interval: 3000
+       onTriggered: {
+         startScene.visible = false
+         gameScene.visible = true
+         gameOverScene.visible = false
+
+       }
+     }
+  }//GameStar
+  function changeToGameOverScene(won) {
+    gameWon = won
+    gameOverScene.visible = true
+    gameScene.visible = false
+    monstersDestroyed = 0
+    entityManager.removeEntitiesByFilter(["projectile", "monster","player"])
+
+  }
+
 }
 
