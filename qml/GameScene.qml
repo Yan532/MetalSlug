@@ -5,7 +5,6 @@ import "levels"
 
 Scene {
   id: gameScene
-  // the "logical size" - the scene content is auto-scaled to match the GameWindow size
   width: 480
   height: 320
   gridSize: 32
@@ -17,31 +16,17 @@ Scene {
     entityContainer: viewPort
   }
 
-  // the whole screen is filled with an incredibly beautiful blue ...
   Rectangle {
     anchors.fill: gameScene.gameWindowAnchorItem
     color: "#74d6f7"
   }
 
-  // ... followed by 2 parallax layers with trees and grass
   ParallaxScrollingBackground {
     sourceImage: "../assets/background/image271.jpg"
     anchors.fill: gameScene.gameWindowAnchorItem
-    // we move the parallax layers at the same speed as the player
     movementVelocity: player.x > offsetBeforeScrollingStarts ? Qt.point(-player.horizontalVelocity,0) : Qt.point(0,0)
-    // the speed then gets multiplied by this ratio to create the parallax effect
     ratio: Qt.point(0.3,0)
   }
-//  ParallaxScrollingBackground {
-//    sourceImage: "../assets/background/layer1.jpg"
-//    anchors.fill: parent
-//    anchors.horizontalCenter: gameScene.gameWindowAnchorItem.horizontalCenter
-//    movementVelocity: player.x > offsetBeforeScrollingStarts ? Qt.point(-player.horizontalVelocity,0) : Qt.point(0,0)
-//    ratio: Qt.point(0.6,0)
-//  }
-
-  // this is the moving item containing the level and player
-
 
   Item {
     id: viewPort
@@ -53,23 +38,19 @@ Scene {
     PhysicsWorld {
       id: physicsWorld
       gravity.y: 20
-      debugDrawVisible: true // enable this for physics debugging
+      debugDrawVisible: false
       z: 1000
 
       onPreSolve: {
-        //this is called before the Box2DWorld handles contact events
         var entityA = contact.fixtureA.getBody().target
         var entityB = contact.fixtureB.getBody().target
         if(entityB.entityType === "platform" && entityA.entityType === "player" &&
             entityA.y + entityA.height > entityB.y) {
-          //by setting enabled to false, they can be filtered out completely
-          //-> disable cloud platform collisions when the player is below the platform
           contact.enabled = false
         }
       }
     }
 
-    // you could load your levels Dynamically with a Loader component here
     Level1 {
       id: level
     }
@@ -83,10 +64,16 @@ Scene {
 
 
     Component{
-        id:monster
+        id:soldierfromright
         Enemy{
         }
-}
+    }
+
+    Component{
+        id:soldierfromleft
+        LeftEnemy{
+        }
+    }
 
     Component{
         id:bullet
@@ -100,104 +87,70 @@ Scene {
       height: 10
       x: player.x
       anchors.bottom: viewPort.bottom
-      // if the player collides with the reset sensor, he goes back to the start
       onContact: {
         player.x = 20
         player.y = 100
       }
-      // this is just for you to see how the sensor moves, in your real game, you should position it lower, outside of the visible area
     }
     ResetSensor{
         id:startline
         height:gameScene.gameWindowAnchorItem.height
         width: 1
-        anchors.left: viewPort
+        x: player.x - 400
     }
 
     ResetSensor{
         id:endline
         height:gameScene.gameWindowAnchorItem.height
         width: 1
-        x:15000
-        anchors.right: viewPort
+        x:player.x + 400
      }
 
     ResetSensor{
         id:topline
         width: player.width +50
         height: 10
-        x: player.x - 10
+        x: player.x - 20
         anchors.bottom: gameScene.top
     }
  }
 
-//  Rectangle {
-//    // you should hide those input controls on desktops, not only because they are really ugly in this demo, but because you can move the player with the arrow keys there
-//    //visible: !system.desktopPlatform
-//    //enabled: visible
-//    anchors.right: parent.right
-//    anchors.bottom: parent.bottom
-//    height: 50
-//    width: 150
-//    color: "blue"
-//    opacity: 0.4
-
-//    Rectangle {
-//      anchors.centerIn: parent
-//      width: 1
-//      height: parent.height
-//      color: "white"
-//    }
-//    MultiPointTouchArea {
-//      anchors.fill: parent
-//      onPressed: {
-//        if(touchPoints[0].x < width/2)
-//          controller.xAxis = -1
-//        else
-//          controller.xAxis = 1
-//      }
-//      onUpdated: {
-//        if(touchPoints[0].x < width/2)
-//          controller.xAxis = -1
-//        else
-//          controller.xAxis = 1
-//      }
-//      onReleased: controller.xAxis = 0
-//    }
-//  }
-
-//  Rectangle {
-//    // same as the above input control
-//    //visible: !system.desktopPlatform
-//    //enabled: visible
-//    anchors.left: parent.left
-//    anchors.bottom: parent.bottom
-//    height: 100
-//    width: 100
-//    color: "green"
-//    opacity: 0.4
-
-//    Text {
-//      anchors.centerIn: parent
-//      text: "jump"
-//      color: "white"
-//      font.pixelSize: 9
-//    }
-//    TapHandler{
-//        onTapped: {
-//            player.jump()
-//        }
-//    }
-//  }
-
-  // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controllerv
-
-
-  Timer {
+  Timer {                                               //敌人生成
     running: viewPort.visible
     repeat: true
-    interval: 1000 // a new target(=monster) is spawned every second
-    onTriggered: addTarget()
+    interval: 1000
+    onTriggered: addTargetright()
+  }
+  Timer {                                               //敌人生成
+    running: viewPort.visible
+    repeat: true
+    interval: 3000
+    onTriggered: addTargetright()
+  }
+  Timer{
+      running: viewPort.visible
+      repeat: true
+      interval: 3000
+      onTriggered: addTargetleft()
+  }
+
+  SoundEffect{
+      id: firesound
+      source:"../assets/sound/fire.wav"
+  }
+
+  SoundEffect{
+      id:deadsound
+      source: "../assets/sound/dead.wav"
+  }
+
+  function addTargetright() {
+    console.debug("create a new soldier fromright")
+    entityManager.createEntityFromComponent(soldierfromright)
+  }
+  function addTargetleft() {
+    console.debug("create a new soldier fromleft")
+    entityManager.createEntityFromComponent(soldierfromleft)
   }
   Keys.forwardTo: controller
   TwoAxisController{
@@ -208,10 +161,10 @@ Scene {
           "down": Qt.Key_S,
           "left": Qt.Key_A,
           "right": Qt.Key_D,
-          "fire": Qt.Key_K
+          "fire": Qt.Key_J
       }
       onInputActionPressed: {
-      console.debug("key pressed actionName " + actionName)
+      console.debug("key pressed actionName " + actionName)     //根据操作键位进行相应的行动
           if(actionName == "up")
           {
               player.anim.jumpTo("up")
@@ -245,12 +198,6 @@ Scene {
               {
                   player.body.rotation = 90
               }
-              if(player.state == "walking")
-              {
-                  player.anim.jumpTo("down")
-                  player.anim.running = true
-                  player.y += 10
-              }
           }
 
           if(actionName == "jump")
@@ -259,7 +206,8 @@ Scene {
           }
           if(actionName == "fire")
           {
-              fire()          
+              fire()
+              firesound.play()
           }
 
       }
@@ -279,25 +227,18 @@ Scene {
               }
             }
    }
-  function addTarget() {
-    console.debug("create a new monster")
-    entityManager.createEntityFromComponent(monster)
-  }
 
   function fire(){
-      var speed = 500
+      var speed = 500                                                                               //子弹的基础速度
 
       var rotation = player.body.rotation
 
-      // calculate a bullet movement vector with the rotation and the speed
       var xDirection = Math.cos(rotation * Math.PI / 180.0) * speed
-      var yDirection = Math.sin(rotation * Math.PI / 180.0) * speed
+      var yDirection = Math.sin(rotation * Math.PI / 180.0) * speed                                 //子弹射出时的速度
 
-      // calculate the bullet spawn point: start at the center of the tank translate it outside of the body towards the final direction
       var startX= (16 * Math.cos((rotation) * Math.PI / 180)) + player.x  + player.width / 2
-      var startY= (16 * Math.sin((rotation) * Math.PI / 180)) + player.y + player.height / 2
+      var startY= (16 * Math.sin((rotation) * Math.PI / 180)) + player.y + player.height / 2        //子弹射出的起始位置
 
-      // create and remove bullet entities at runtime
       entityManager.createEntityFromUrlWithProperties(Qt.resolvedUrl("../qml/entities/Pistolbullet.qml"), {
                                                         "start" : Qt.point(startX, startY),
                                                         "velocity" : Qt.point(xDirection, yDirection),

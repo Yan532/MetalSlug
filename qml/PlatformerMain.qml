@@ -1,79 +1,69 @@
 import Felgo 3.0
-import QtQuick 2.0
+import QtQuick 2.15
 
 GameWindow {
   id: gameWindow
   property bool gameWon
   property bool splashFinished: false
   onSplashScreenFinished: { splashFinished = true}
-  property int monstersDestroyed
-  onMonstersDestroyedChanged: {
-    if(monstersDestroyed > 5) {
-      // you won the game, shot at 5 monsters
-      changeToGameOverScene(true)
+  property int sodliersDestroyed
+  onSodliersDestroyedChanged: {
+    if(sodliersDestroyed > 30) {
+      changeToGameOverScene(true)       //消灭30个敌人则进入胜利界面，可以自行修改数量
     }
   }
-  // You get free licenseKeys from https://felgo.com/licenseKey
-  // With a licenseKey you can:
-  //  * Publish your games & apps for the app stores
-  //  * Remove the Felgo Splash Screen or set a custom one (available with the Pro Licenses)
-  //  * Add plugins to monetize, analyze & improve your apps (available with the Pro Licenses)
-  //licenseKey: "<generate one from https://felgo.com/licenseKey>"
 
   activeScene: gameScene
 
-  // the size of the Window can be changed at runtime by pressing Ctrl (or Cmd on Mac) + the number keys 1-8
-  // the content of the logical scene size (480x320 for landscape mode by default) gets scaled to the window size based on the scaleMode
-  // you can set this size to any resolution you would like your project to start with, most of the times the one of your main target device
-  // this resolution is for iPhone 4 & iPhone 4S
   screenWidth: 960
   screenHeight: 640
 
-  GameScene {
+  GameScene {                   //游戏界面
     id: gameScene
     visible: false
   }
-  Scene {
+  Scene {                       //游戏结束界面
     id: gameOverScene
     visible: false
     BackgroundImage
     {
         anchors.fill:parent
-        source: "/合金弹头/MetalSlug/assets/background/background.png"
+        source: "../assets/background/background2.jpg"
     }
     Text {
       anchors.centerIn: parent
-      text: gameWon ? "You won " : "You lost"
+      text: gameWon ? "You won\n   点击界面可以再来一次" : "You lost\n   点击屏幕可以再来一次"
+      color: "red"
     }
 
     onVisibleChanged: {
       if(visible) {
-        returnToGameSceneTimer.start()  // make the scene invisible after 3 seconds, after it got visible
+        returnToGameSceneTimer.start()
       }
     }
 
-    Timer {
-      id: returnToGameSceneTimer
-      interval: 3000
-      onTriggered: {
-        gameScene.visible = true
-        gameOverScene.visible = false
-      }
+    TapHandler{
+        onTapped: {
+            startScene.visible = false
+            gameScene.visible = true
+            gameOverScene.visible = false
+        }
     }
   }// GameOverScene
-  Scene
+  Scene                         //游戏开始界面
   {
      id:startScene
      visible:true
      BackgroundImage
      {
          anchors.fill:parent
-         source: "/合金弹头/MetalSlug/assets/background/background.png"
+         source: "../assets/background/background2.jpg"
      }
 
      Text {
        anchors.centerIn: parent
-       text: "Start"
+       text: "点击界面开始游戏"
+       color: "red"
      }
      onVisibleChanged: {
        if(visible) {
@@ -81,23 +71,20 @@ GameWindow {
        }
      }
 
-     Timer {
-       id:gotoToGameSceneTimer
-       interval: 3000
-       onTriggered: {
-         startScene.visible = false
-         gameScene.visible = true
-         gameOverScene.visible = false
-
-       }
+    TapHandler{
+        onTapped:{
+            startScene.visible = false
+            gameScene.visible = true
+            gameOverScene.visible = false
+        }
      }
   }//GameStar
   function changeToGameOverScene(won) {
     gameWon = won
     gameOverScene.visible = true
     gameScene.visible = false
-    monstersDestroyed = 0
-    entityManager.removeEntitiesByFilter(["projectile", "monster","player"])
+    sodliersDestroyed = 0
+    entityManager.removeEntitiesByFilter(["pistolbullet","enemy","player"])
 
   }
 

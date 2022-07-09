@@ -7,48 +7,63 @@ EntityBase {
   width: 50
   height: 50
 
-  // add some aliases for easier access to those properties from outside
   property alias collider: collider
   property alias horizontalVelocity: collider.linearVelocity.x
   property alias body: image
   property alias anim: sequence
 
-  // the contacts property is used to determine if the player is in touch with any solid objects (like ground or platform), because in this case the player is walking, which enables the ability to jump. contacts > 0 --> walking state
   property int contacts: 0
   property int leftoright: 0
-  // property binding to determine the state of the player like described above
+  property int life: 3                          //主角生命数
+  property bool invincible : false               //主角无敌状态
+  property int invincibleCounter: 0             //无敌计数
+
 
   state: contacts > 0 ? "walking" : "jumping"
   onStateChanged: console.debug("player.state " + state)
 
-  CircleCollider {
+  CircleCollider {                              //圆形盒子
     id: collider
     radius: 25
     x:radius/2
     y:radius/2
-    // this collider must be dynamic because we are moving it by applying forces and impulses
     density: 0
     linearDamping: 1
     force: Qt.point(controller.xAxis*1000,0)
-    // limit the horizontal velocity
     onLinearVelocityChanged: {
       if(linearVelocity.x > 100) linearVelocity.x = 100
       if(linearVelocity.x < -100) linearVelocity.x = -100
     }
   }
 
+  Timer{
+      id: invincibletimer
+      interval: 100;
+      running: true;
+      repeat: true;
+      onTriggered: {
+          if(invincible){
+              invincibleCounter++;
+              sequence.opacity = 0.3;
+          }
+          if(invincibleCounter == 30)
+          {
+              invincible = false;
+              invincibleCounter = 0;
+              sequence.opacity = 1;
+          }
+      }
+  }
 
-  Image {
+
+  Image {                                       //主角精灵标表
       id:image
       scale: 0.6
       source: "../../assets/player/contral.png"
       visible: false
   }
 
-
-  // here you could use a SpriteSquenceVPlay to animate your player
-  MultiResolutionImage {
-
+  MultiResolutionImage {                    //主角动画
       SpriteSequence {
                   id: sequence;
                   width: 85;
@@ -61,11 +76,7 @@ EntityBase {
                           name: "left";
                           source: image.source;
                           frameCount: 4;
-<<<<<<< HEAD
                           frameY: 0;
-=======
-                          frameY: ;
->>>>>>> liaowanyu
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -87,11 +98,7 @@ EntityBase {
                           name: "down";
                           source: image.source;
                           frameCount: 4;
-<<<<<<< HEAD
-                          frameY:image.height/4*3
-=======
-                           frameY: image.height/4*3;
->>>>>>> liaowanyu
+                          frameY: image.height/4*3;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -114,65 +121,28 @@ EntityBase {
                   ]
               }
       focus: true;
-              Keys.onPressed: {
-                  switch(event.key)
-                  {
-                  case Qt.Key_Up:
-                      sequence.y -= 5;
-                      sequence.jumpTo("up");
-                      sequence.running = true;
-                      break;
-                  case Qt.Key_Down:
-                      sequence.y += 5;
-                      sequence.jumpTo("down");
-                      sequence.running = true;
-                      break;
-                  case Qt.Key_Left:
-                      sequence.x -= 5;
-                      sequence.jumpTo("left");
-                      sequence.running = true;
-                      break;
-                  case Qt.Key_Right:
-                      sequence.x += 5;
-                      sequence.jumpTo("right");
-                      sequence.running = true;
-                      break;
-                  default:
-                      ;
-                  }
-              }
-              Keys.onReleased: {
-                  sequence.running = false;
-              }
-
 
 }
 
   Timer {
     id: updateTimer
-    // set this interval as high as possible to improve performance, but as low as needed so it still looks good
     interval:1
     running: true
     repeat: true
     onTriggered: {
       var xAxis = controller.xAxis;
-      // if xAxis is 0 (no movementd command) we slow the player down until he stops
-      if(xAxis === 0) {
-      // if xAxis is 0 (no movement command) we slow the player down until he stops
       if(xAxis == 0) {
         if(Math.abs(player.horizontalVelocity) > 10) player.horizontalVelocity /= 1.5
         else player.horizontalVelocity = 0
         }
-      }
     }
   }
 
-  function jump() {
+  function jump() {                         //跳跃
     console.debug("jump requested at player.state " + state)
     if(player.state == "walking") {
       console.debug("do the jump")
-      // for the jump, we simply set the upwards velocity of the collider
-      collider.linearVelocity.y = -300
+      collider.linearVelocity.y = -300              //起跳速度
          }
    }
 }

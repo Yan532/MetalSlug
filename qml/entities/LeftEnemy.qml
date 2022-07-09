@@ -1,4 +1,4 @@
-﻿import QtQuick 2.15
+import QtQuick 2.15
 import Felgo 3.0
 
 EntityBase {
@@ -9,14 +9,15 @@ EntityBase {
       visible: false
       source: "../../assets/touxiang/enemy.png"
       scale: 0.5
+      mirror: true
     }
+    x:10
     y:240
-    x:2000
 
     NumberAnimation on x {
-      from: player.x + 500
+      from: player.x - 300
       to: player.x
-       duration:6000
+      duration:6000
     }
 
     BoxCollider {
@@ -37,9 +38,9 @@ EntityBase {
             if(!player.invincible){
                 collidedEntity.x = 20;
                 collidedEntity.y = 100;
+                deadsound.play()
                 player.life--;
                 player.invincible = true;
-                deadsound.play()
                 if(player.life == 0)
                 {
                     changeToGameOverScene(false)
