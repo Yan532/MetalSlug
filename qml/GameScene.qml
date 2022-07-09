@@ -96,14 +96,14 @@ Scene {
         id:startline
         height:gameScene.gameWindowAnchorItem.height
         width: 1
-        x: player.x - 400
+        x: player.x - 300
     }
 
     ResetSensor{
         id:endline
         height:gameScene.gameWindowAnchorItem.height
         width: 1
-        x:player.x + 400
+        x:player.x + 300
      }
 
     ResetSensor{

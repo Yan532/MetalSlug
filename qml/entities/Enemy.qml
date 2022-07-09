@@ -76,7 +76,7 @@ EntityBase {
               source: enemyImage.source
               frameWidth: 242/5
               frameHeight: 72
-              duration:1000
+              duration:200
               frameX:0
               frameY:0
               frameCount: 5
