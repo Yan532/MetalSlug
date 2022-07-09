@@ -55,13 +55,13 @@ EntityBase {
                   height: 85;
                   scale: 0.5
                   interpolate: true;
-                  running: true;
+                  running: false;
                   sprites: [
                       Sprite {
                           name: "left";
                           source: image.source;
                           frameCount: 4;
-                          frameY: image.height/4;
+                          frameY: ;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -72,7 +72,7 @@ EntityBase {
                           name: "right";
                           source: image.source;
                           frameCount: 4;
-                          frameY: image.height/4*2;
+                          frameY: image.height/4;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -83,6 +83,7 @@ EntityBase {
                           name: "down";
                           source: image.source;
                           frameCount: 4;
+                           frameY: image.height/4*3;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -95,7 +96,7 @@ EntityBase {
                           name: "up";
                           source: image.source;
                           frameCount: 4;
-                          frameY: image.height/4*3;
+                          frameY: image.height/4*2;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;

@@ -80,10 +80,13 @@ Scene {
       y: 100
     }
 
-    Enemy{
 
-    }
 
+    Component{
+        id:monster
+        Enemy{
+        }
+}
 
     Component{
         id:bullet
@@ -186,7 +189,15 @@ Scene {
 //    }
 //  }
 
-  // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controller
+  // on desktops, you can move the player with the arrow keys, on mobiles we are using our custom inputs above to modify the controller axis values. With this approach, we only need one actual logic for the movement, always referring to the axis values of the controllerv
+
+
+  Timer {
+    running: viewPort.visible
+    repeat: true
+    interval: 1000 // a new target(=monster) is spawned every second
+    onTriggered: addTarget()
+  }
   Keys.forwardTo: controller
   TwoAxisController{
       id: controller
@@ -205,6 +216,7 @@ Scene {
               player.anim.jumpTo("up")
               player.body.rotation = 270
               player.anim.running = true
+
           }
           if(actionName == "right")
           {
@@ -215,6 +227,12 @@ Scene {
           if(actionName == "left")
           {
               player.anim.jumpTo("left");
+              player.body.rotation = 180
+              player.anim.running = true
+          }
+          if(actionName == "down")
+          {
+              player.anim.jumpTo("down");
               player.body.rotation = 180
               player.anim.running = true
           }
@@ -232,10 +250,15 @@ Scene {
           }
           if(actionName == "fire")
           {
-              fire()
+              fire()          
           }
+
       }
    }
+  function addTarget() {
+    console.debug("create a new monster")
+    entityManager.createEntityFromComponent(monster)
+  }
 
   function fire(){
       var speed = 500
