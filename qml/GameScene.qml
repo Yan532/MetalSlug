@@ -25,7 +25,7 @@ Scene {
 
   // ... followed by 2 parallax layers with trees and grass
   ParallaxScrollingBackground {
-    sourceImage: "../assets/background/layer1.jpg"
+    sourceImage: "../assets/background/image271.jpg"
     anchors.fill: gameScene.gameWindowAnchorItem
     // we move the parallax layers at the same speed as the player
     movementVelocity: player.x > offsetBeforeScrollingStarts ? Qt.point(-player.horizontalVelocity,0) : Qt.point(0,0)
@@ -121,9 +121,10 @@ Scene {
 
     ResetSensor{
         id:topline
-        width: gameScene.gameWindowAnchorItem.width
-        height: 1
-        anchors.top: viewPort.top
+        width: player.width +50
+        height: 10
+        x: player.x - 10
+        anchors.bottom: gameScene.top
     }
  }
 
@@ -211,18 +212,26 @@ Scene {
               player.anim.jumpTo("right")
               player.body.rotation = 0
               player.anim.running = true
+              player.leftoright = 0
           }
           if(actionName == "left")
           {
               player.anim.jumpTo("left");
               player.body.rotation = 180
               player.anim.running = true
+              player.leftoright = 1
           }
           if(actionName == "down")
           {
               if(player.state == "jumping")
               {
                   player.body.rotation = 90
+              }
+              if(player.state == "walking")
+              {
+                  player.anim.jumpTo("down")
+                  player.anim.running = true
+                  player.y += 10
               }
           }
 
@@ -235,6 +244,21 @@ Scene {
               fire()
           }
       }
+      onInputActionReleased: {
+          if(actionName == "up")
+          {
+              if(player.leftoright == 0)
+              {
+                  player.anim.jumpTo("right")
+                  player.body.rotation = 0
+                  player.anim.running = true
+              }
+              else{
+                  player.anim.jumpTo("left")
+                  player.body.rotation = 180
+                  player.anim.running = true
+              }
+            }
    }
 
   function fire(){
@@ -247,7 +271,7 @@ Scene {
       var yDirection = Math.sin(rotation * Math.PI / 180.0) * speed
 
       // calculate the bullet spawn point: start at the center of the tank translate it outside of the body towards the final direction
-      var startX= (16 * Math.cos((rotation) * Math.PI / 180)) + player.x + player.width / 2
+      var startX= (16 * Math.cos((rotation) * Math.PI / 180)) + player.x  + player.width / 2
       var startY= (16 * Math.sin((rotation) * Math.PI / 180)) + player.y + player.height / 2
 
       // create and remove bullet entities at runtime
@@ -255,6 +279,7 @@ Scene {
                                                         "start" : Qt.point(startX, startY),
                                                         "velocity" : Qt.point(xDirection, yDirection),
                                                         "rotation" : player.body.rotation});
+        }
   }
 }
 

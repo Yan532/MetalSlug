@@ -16,7 +16,6 @@ EntityBase {
   // the contacts property is used to determine if the player is in touch with any solid objects (like ground or platform), because in this case the player is walking, which enables the ability to jump. contacts > 0 --> walking state
   property int contacts: 0
   property int leftoright: 0
-  property int up: 0
   // property binding to determine the state of the player like described above
 
   state: contacts > 0 ? "walking" : "jumping"
@@ -31,7 +30,6 @@ EntityBase {
     density: 0
     linearDamping: 1
     force: Qt.point(controller.xAxis*1000,0)
-    rotation: 0
     // limit the horizontal velocity
     onLinearVelocityChanged: {
       if(linearVelocity.x > 100) linearVelocity.x = 100
@@ -39,12 +37,14 @@ EntityBase {
     }
   }
 
+
   Image {
       id:image
       scale: 0.6
       source: "../../assets/player/contral.png"
       visible: false
   }
+
 
   // here you could use a SpriteSquenceVPlay to animate your player
   MultiResolutionImage {
@@ -61,7 +61,7 @@ EntityBase {
                           name: "left";
                           source: image.source;
                           frameCount: 4;
-                          frameY: image.height/4;
+                          frameY: 0;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -72,7 +72,7 @@ EntityBase {
                           name: "right";
                           source: image.source;
                           frameCount: 4;
-                          frameY: image.height/4*2;
+                          frameY: image.height/4;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -83,6 +83,7 @@ EntityBase {
                           name: "down";
                           source: image.source;
                           frameCount: 4;
+                          frameY:image.height/4*3
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;
@@ -95,7 +96,7 @@ EntityBase {
                           name: "up";
                           source: image.source;
                           frameCount: 4;
-                          frameY: image.height/4*3;
+                          frameY: image.height/4*2;
                           frameWidth: image.width/4;
                           frameHeight: image.height/4;
                           frameRate: 10;

@@ -20,7 +20,6 @@ EntityBase {
     }
 
     BoxCollider {
-      anchors.fill: enemyImage
       collisionTestingOnlyMode: true
       fixture.onBeginContact: {
         var collidedEntity = other.getBody().target
